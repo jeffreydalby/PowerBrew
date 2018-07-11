@@ -8,6 +8,6 @@ public class BrewLatteMacchiato implements BrewBeverage {
         //first inject concentrate
         PowerBrew5000.addExtract(Beverages.beverageChoices.Latte_Macchiato, EXTRACT_CONCENTRATION);
         //let the person know their drink is being made
-        System.out.println("Making your cup of " + Beverages.beverageChoices.Latte_Macchiato);
+        System.out.println("Making your cup of " + (int) PowerBrew5000.getWaterTankCurrentTemp() + " degree " + Beverages.beverageChoices.Latte_Macchiato);
     }
 }

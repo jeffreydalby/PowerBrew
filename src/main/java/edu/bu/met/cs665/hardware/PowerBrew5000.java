@@ -66,11 +66,11 @@ public class PowerBrew5000 implements Runnable {
         while (waterTankCurrentTemp < WATER_TARGET_TEMP) {
             sleeper(100);
             heatWaterTank(5);
-            System.out.println(".");
+            System.out.print(".");
         }
 
 
-        System.out.println("Water us now a perfect " + waterTankCurrentTemp + " degrees.");
+        System.out.println("\nWater is now a perfect " + waterTankCurrentTemp + " degrees.");
     }
 
     private void heatWaterTank(double amount) {
@@ -123,7 +123,8 @@ public class PowerBrew5000 implements Runnable {
             //check extract levels and warn if low
             lowExtracts = getLowExtractLevels();
             if (!lowExtracts.isEmpty()) {
-                lowExtracts.forEach((extract, level) -> System.out.println(extract.toString() + " extract is at " + level.toString() + "%, please refill it soon."));
+                lowExtracts.forEach((extract, level) -> System.out.println(extract.toString() + " extract is at " + level.toString() + "%, Shutting down to be refilled."));
+                System.exit(0);
             }
 
             //check heat levels and heat until at ideal temp

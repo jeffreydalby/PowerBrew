@@ -26,7 +26,7 @@ public class MainMenu {
 
     public void show() {
         while (true) {
-            System.out.println("Welcome to the Hot Beverage 5000");
+            System.out.println("Welcome to the PowerBrew 5000");
             beverageChoice = getBeverage();
             MakeDrink drinkMaker = new MakeDrink(beverageMap.get(beverageChoice));
             drinkMaker.start();
