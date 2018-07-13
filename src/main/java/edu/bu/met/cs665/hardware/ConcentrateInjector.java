@@ -30,8 +30,9 @@ class ConcentrateInjector {//for fun we are using a percentage of the concentrat
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
 
-    }//might seem counterintuitive but addConcentrate adds concentrate to the drink, which removes that quantity from the reserves.
+    }
 
+    //might seem counterintuitive but addConcentrate adds concentrate to the drink, which removes that quantity from the reserves.
     void addConcentrate(Beverages.BeverageChoices beverageChoice, double percentToAdd) {
         System.out.println("Mixing in " + beverageChoice.toString());
         if (concentrateLevels.get(beverageChoice) <= LOW_CONCETRATE_WARNING_PERCENTAGE) {
