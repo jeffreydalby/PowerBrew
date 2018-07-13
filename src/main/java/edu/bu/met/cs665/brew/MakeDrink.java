@@ -27,7 +27,7 @@ public class MakeDrink {
     public void brew(PowerBrew5000 theMachine) {
         //make the drink
         System.out.println("\n**************Brewing the Perfect Drink**************\n");
-        this.beverageToMake.brew(theMachine);
+        System.out.println(this.beverageToMake.brew(theMachine));
         for (int i = 0; i <= 10; i++) {
             try {
                 System.out.print(".");
