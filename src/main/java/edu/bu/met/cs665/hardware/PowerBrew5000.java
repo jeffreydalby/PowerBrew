@@ -1,6 +1,5 @@
 package edu.bu.met.cs665.hardware;
 
-import edu.bu.met.cs665.Main;
 import edu.bu.met.cs665.brew.Beverages.BeverageChoices;
 import edu.bu.met.cs665.condiments.Condiments;
 
@@ -14,6 +13,15 @@ public class PowerBrew5000 implements Runnable {
     private final CondimentInjector condimentInjector = new CondimentInjector();
     private final Heater heater = new Heater();
 
+    //flag to let us know that either a condiment or concentrate is out.
+    //not super user friendly cause if anything is out we shut the whole machine down.
+    public static boolean isNeedsToBeServiced() {
+        return needsToBeServiced;
+    }
+
+    private static boolean needsToBeServiced;
+
+
     //we want external resourse to access hardware componenets via the PowerBrew5000
     public double getWaterTankCurrentTemp() {
         return heater.getWaterTankCurrentTemp();
@@ -23,7 +31,7 @@ public class PowerBrew5000 implements Runnable {
     //https://www.littlecoffeeplace.com/coffee-ideal-temperature
 
     //this is just here to simulate a heating light on the machine, at the moment it is just
-    //running in the background.
+    //running in the background. Let's other packages check if the heater is on
     public boolean isHeating() {
         return heater.isHeating();
     }
@@ -41,32 +49,31 @@ public class PowerBrew5000 implements Runnable {
 
     }
 
+    /**
+     * Turn on the machine and heat up the water
+     */
     public void powerOn() {
         System.out.println("Initialize PowerBrew5000....please wait (CTRL-C to Power Down)");
         heater.initialHeat();
 
     }
 
-    public void initialHeat() {
-
-
-        heater.initialHeat();
-    }
-
-    private void heatWaterTank(double amount) {
-        heater.heatWaterTank(amount);
-    }
-
-    private void decreaseWaterTemp(double amount) {
-        heater.decreaseWaterTemp(amount);
-    }
-
-    //might seem counterintuitive but addConcentrate adds concentrate to the drink, which removes that quantity from the reserves.
+    /**
+     * allows outside object to add concentrate
+     *
+     * @param beverageChoice - which beverage concentrate to add
+     * @param percentToAdd   - percentage concentrate to add
+     */
     public void addConcentrate(BeverageChoices beverageChoice, double percentToAdd) {
         concentrateInjector.addConcentrate(beverageChoice, percentToAdd);
     }
 
-    //might seem counterintuitive but addCondiment adds condiments to the drink, which removes that quantity from the reserves.
+    /**
+     * allows external object to add condiments (sugar, milk)
+     *
+     * @param condimentChoice- type of condiment to add
+     * @param quantityToAdd-   quantity of condiment to add
+     */
     public void addCondiment(Condiments.CondimentChoices condimentChoice, int quantityToAdd) {
 
         condimentInjector.addCondiment(condimentChoice, quantityToAdd);
@@ -76,6 +83,7 @@ public class PowerBrew5000 implements Runnable {
     //background process that keeps the PowerBrew5000 running
     @Override
     public void run() {
+        //maps to trak low beverages and condiments
         Map<BeverageChoices, Double> lowConcentrate;
         Map<Condiments.CondimentChoices, Integer> lowCondiments;
 
@@ -89,7 +97,7 @@ public class PowerBrew5000 implements Runnable {
             lowConcentrate = concentrateInjector.getLowConcentrateLevels();
             if (!lowConcentrate.isEmpty()) {
                 lowConcentrate.forEach((concentrate, level) -> System.out.println(concentrate.toString() + " concentrate is at " + level.toString() + "%, Shutting down to be refilled."));
-                Main.setNeedsService(true);
+                needsToBeServiced = true;
                 break;
             }
 
@@ -97,7 +105,7 @@ public class PowerBrew5000 implements Runnable {
             lowCondiments = condimentInjector.getLowCondimentLevels();
             if (!lowCondiments.isEmpty()) {
                 lowCondiments.forEach((condiment, level) -> System.out.println("There are only " + level.toString() + condiment.toString() + " left, Shutting down to be refilled."));
-                Main.setNeedsService(true);
+                needsToBeServiced = true;
                 break;
             }
 

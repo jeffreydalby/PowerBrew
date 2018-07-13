@@ -2,7 +2,13 @@ package edu.bu.met.cs665.brew;
 
 import edu.bu.met.cs665.hardware.PowerBrew5000;
 
+//Concrete implementation using Strategy Pattern for Green Tea
 public class BrewGreenTea implements BrewBeverage {
+    /**
+     * Brew us up some green Tea
+     *
+     * @param theMachine - pass the hardware around to keep things decoupled
+     */
     @Override
     public void brew(PowerBrew5000 theMachine) {
         //first inject concentrate

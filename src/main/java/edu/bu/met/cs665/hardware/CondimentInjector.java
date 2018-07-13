@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-class CondimentInjector {//for fun condiments come in small packages "units" that are auto-fed and added to drinks
+class CondimentInjector {
+    //for fun condiments come in small packages "units" that are auto-fed and added to drinks
     private static final int CONDIMENTS_START_UNITS = 1000;
     private static final int LOW_CONDIMENT_WARNING_UNITS = 500;
     private Map<Condiments.CondimentChoices, Integer> condimentLevels = new HashMap<>();
@@ -23,14 +24,25 @@ class CondimentInjector {//for fun condiments come in small packages "units" tha
 
     }
 
+    /**
+     * Finds any condiments below LOW_CONDIMENT_WARNING_UNITS
+     *
+     * @return any condiments below the level
+     */
     Map<Condiments.CondimentChoices, Integer> getLowCondimentLevels() {
         return condimentLevels.entrySet()
                 .stream()
                 .filter(condiment -> condiment.getValue() <= LOW_CONDIMENT_WARNING_UNITS)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-    }//might seem counterintuitive but addCondiment adds condiments to the drink, which removes that quantity from the reserves.
+    }
 
+    /**
+     * might seem counter intuitive but addCondiment adds condiments to the drink, which removes that quantity from the reserves.
+     *
+     * @param condimentChoice - condiment to add
+     * @param quantityToAdd-  units of condiment to add
+     */
     void addCondiment(Condiments.CondimentChoices condimentChoice, int quantityToAdd) {
 
         if (condimentLevels.get(condimentChoice) <= LOW_CONDIMENT_WARNING_UNITS) {

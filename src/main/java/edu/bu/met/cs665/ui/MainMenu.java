@@ -1,6 +1,5 @@
 package edu.bu.met.cs665.ui;
 
-import edu.bu.met.cs665.Main;
 import edu.bu.met.cs665.brew.*;
 import edu.bu.met.cs665.condiments.*;
 import edu.bu.met.cs665.hardware.PowerBrew5000;
@@ -10,15 +9,18 @@ import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
+//Main text base UI for the PowerBrew5000
 public class MainMenu {
 
-    private PowerBrew5000 theMachine;
-    private static final int MAX_NUMBER_OF_CONDIMENT_UNITS = 3;
+    private PowerBrew5000 theMachine; //instance of machine object to pass around to help decouple
+    private static final int MAX_NUMBER_OF_CONDIMENT_UNITS = 3; //change this to allow more condiments
 
     private Beverages.BeverageChoices beverageChoice;
+
     //scanner to use for all input
     private static Scanner sc = new Scanner(System.in, "UTF-8");
 
+    //Maps to link choices to behaviors
     private Map<Beverages.BeverageChoices, BrewBeverage> beverageMap = new HashMap<>();
     private Map<Condiments.CondimentChoices, AddCondiment> condimentMap = new HashMap<>();
 
@@ -29,15 +31,18 @@ public class MainMenu {
         this.fillCondimentMap();
     }
 
-
+    /**
+     * Display our main menu (text based via system.out)
+     */
     public void show() {
         while (true) {
-            if (!Main.isNeedsService()) {
+            //checks to see if the machine is out of concentrates or condiments
+            if (!PowerBrew5000.isNeedsToBeServiced()) {
                 System.out.println("Welcome to the PowerBrew 5000");
-                beverageChoice = this.getBeverage();
-                this.addCondiments();
-                MakeDrink drinkMaker = new MakeDrink(beverageMap.get(beverageChoice));
-                drinkMaker.brew(this.theMachine);
+                beverageChoice = this.getBeverage();  //get type of beverage desired
+                this.addCondiments(); //get condiments required and add them to drink
+                MakeDrink drinkMaker = new MakeDrink(beverageMap.get(beverageChoice)); //create drinkMaker with proper behavior "Strategy Pattern"
+                drinkMaker.brew(this.theMachine); //make the beverage
             } else {
                 System.out.println("System is in need of service.");
                 break;
@@ -46,6 +51,9 @@ public class MainMenu {
         }
     }
 
+    /**
+     * All user to select and add condiments
+     */
     private void addCondiments() {
 
         InjectCondiment injectCondiment = new InjectCondiment();
@@ -68,10 +76,17 @@ public class MainMenu {
 
     }
 
+    /**
+     * Allows us to get the condiments units desired by the person
+     *
+     * @param condiment - which condiment are we asking for
+     * @return -number of units
+     */
     private int getCondimentAmount(Condiments.CondimentChoices condiment) {
         int amountDesired;
         while (true) {
             try {
+                //request number of units
                 System.out.println("How many " + condiment + " would you like? Please choose an amount between 0 and " + MAX_NUMBER_OF_CONDIMENT_UNITS);
                 amountDesired = sc.nextInt();
                 if (amountDesired >= 0 && amountDesired <= MAX_NUMBER_OF_CONDIMENT_UNITS) break;
@@ -88,6 +103,11 @@ public class MainMenu {
         return amountDesired;
     }
 
+    /**
+     * Menu to request the type of beverage the person would like
+     *
+     * @return -beverage choice the person made.
+     */
     private Beverages.BeverageChoices getBeverage() {
 
         //don't want to be making copies values each time we want the length so do it once
@@ -132,6 +152,7 @@ public class MainMenu {
         this.beverageMap.put(Beverages.BeverageChoices.Yellow_Tea, new BrewYellowTea());
     }
 
+    //This has to be created by hand so don't miss it when adding a new condiment option
     private void fillCondimentMap() {
         this.condimentMap.put(Condiments.CondimentChoices.milk, new AddMilk());
         this.condimentMap.put(Condiments.CondimentChoices.sugar, new AddSugar());

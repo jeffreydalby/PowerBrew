@@ -2,7 +2,7 @@ package edu.bu.met.cs665.brew;
 
 import edu.bu.met.cs665.hardware.PowerBrew5000;
 
-//context
+//Context for Strategy Pattern
 public class MakeDrink {
 
     private BrewBeverage beverageToMake;
@@ -13,11 +13,17 @@ public class MakeDrink {
 
     }
 
+    //pass in the behavior we want for the type of beverage
     public MakeDrink(BrewBeverage beverageType) {
 
         this.beverageToMake = beverageType;
     }
 
+    /**
+     * Brew whatever type of drink behavior this has been created with
+     *
+     * @param theMachine - we pass in the machine to brew it on to decouple it a bit
+     */
     public void brew(PowerBrew5000 theMachine) {
         //make the drink
         System.out.println("\n**************Brewing the Perfect Drink**************\n");
@@ -27,12 +33,11 @@ public class MakeDrink {
                 System.out.print(".");
                 Thread.sleep(100);
             } catch (Exception ex) {
-                //Doing nothing with the catch since this is just a simple program
+                //Doing nothing significant with the catch since this is just a simple program
                 System.out.println("My Sleep was Interrupted!");
             }
 
         }
-        //Doing nothing with the catch since this is just a simple program
         System.out.println("\nAll done! Enjoy your beverage. \n\n");
     }
 
