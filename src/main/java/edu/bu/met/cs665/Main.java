@@ -5,13 +5,26 @@ import edu.bu.met.cs665.ui.MainMenu;
 
 public class Main {
 
+    //hardware implementation to be used throughout
+
+    private static PowerBrew5000 theMachine;
+
+    public static boolean isNeedsService() {
+        return needsService;
+    }
+
+    public static void setNeedsService(boolean needsService) {
+        Main.needsService = needsService;
+    }
+
+    private static boolean needsService;
 
     public static void main(String[] args) {
-        MainMenu systemMenu = new MainMenu();
-        PowerBrew5000 myMachine = new PowerBrew5000();
-        Thread runHardware = new Thread(myMachine);
+        theMachine = new PowerBrew5000();
+        MainMenu systemMenu = new MainMenu(theMachine);
+        Thread runHardware = new Thread(theMachine);
         //power up the PowerBrew5000
-        myMachine.powerOn();
+        theMachine.powerOn();
         runHardware.start();
         systemMenu.show();
 

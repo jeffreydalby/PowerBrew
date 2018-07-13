@@ -4,10 +4,10 @@ import edu.bu.met.cs665.hardware.PowerBrew5000;
 
 public class BrewBlackTea implements BrewBeverage {
     @Override
-    public void brew() {
+    public void brew(PowerBrew5000 theMachine) {
         //first inject concentrate
-        PowerBrew5000.addExtract(Beverages.beverageChoices.Black_Tea, EXTRACT_CONCENTRATION);
+        theMachine.addConcentrate(Beverages.BeverageChoices.Black_Tea, EXTRACT_CONCENTRATION);
         //let the person know their drink is being made
-        System.out.println("Making your cup of " + (int) PowerBrew5000.getWaterTankCurrentTemp() + " degree " + Beverages.beverageChoices.Black_Tea);
+        System.out.println("Making your cup of " + (int) theMachine.getWaterTankCurrentTemp() + " degree " + Beverages.BeverageChoices.Black_Tea);
     }
 }

@@ -1,5 +1,7 @@
 package edu.bu.met.cs665.brew;
 
+import edu.bu.met.cs665.hardware.PowerBrew5000;
+
 //context
 public class MakeDrink {
 
@@ -16,16 +18,17 @@ public class MakeDrink {
         this.beverageToMake = beverageType;
     }
 
-    public void start() {
+    public void brew(PowerBrew5000 theMachine) {
         //make the drink
         System.out.println("\n**************Brewing the Perfect Drink**************\n");
-        this.beverageToMake.brew();
+        this.beverageToMake.brew(theMachine);
         for (int i = 0; i <= 10; i++) {
             try {
                 System.out.print(".");
                 Thread.sleep(100);
             } catch (Exception ex) {
                 //Doing nothing with the catch since this is just a simple program
+                System.out.println("My Sleep was Interrupted!");
             }
 
         }

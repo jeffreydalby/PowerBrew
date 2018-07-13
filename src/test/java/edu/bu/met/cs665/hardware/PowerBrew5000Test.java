@@ -1,10 +1,12 @@
 package edu.bu.met.cs665.hardware;
 
+import edu.bu.met.cs665.brew.Beverages;
+import edu.bu.met.cs665.condiments.Condiments;
 import org.junit.Test;
 
 public class PowerBrew5000Test {
 
-    PowerBrew5000 myMachine = new PowerBrew5000();
+    private PowerBrew5000 myMachine = new PowerBrew5000();
 
     @Test
     public void run() {
@@ -14,7 +16,7 @@ public class PowerBrew5000Test {
 
 
         try {
-            Thread.sleep(10000);
+            Thread.sleep(200);
 
         } catch (InterruptedException ex) { //do nothing just a test
         }
@@ -23,5 +25,23 @@ public class PowerBrew5000Test {
 
 
         testThread.interrupt();
+    }
+
+    @Test
+    public void addExtract() {
+        myMachine.addConcentrate(Beverages.BeverageChoices.Americano, 2.0);
+
+        // will output to screen
+        // Mixing in Americano
+
+    }
+
+    @Test
+    public void addCondiment() {
+        myMachine.addCondiment(Condiments.CondimentChoices.milk, 3);
+
+        //will output to screen
+        //Added 3 splash(es) of milk.
+
     }
 }
